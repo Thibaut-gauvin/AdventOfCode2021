@@ -1,3 +1,6 @@
+from typing import List
+
+
 def part1():
     gamma_rate = ""
     epsilon_rate = ""
@@ -24,11 +27,46 @@ def part1():
     return int(gamma_rate, 2) * int(epsilon_rate, 2)
 
 
+def get_o2(binary_len: int, inputs: List) -> int:
+    for pos in range(binary_len):
+        current = list(map(lambda x: x[pos], inputs))
+        zero_count = current.count("0")
+        one_count = current.count("1")
+
+        if one_count > zero_count or one_count == zero_count:
+            inputs = list(filter(lambda x: x[pos] == "1", inputs))
+        elif one_count < zero_count:
+            inputs = list(filter(lambda x: x[pos] == "0", inputs))
+        if len(inputs) == 1:
+            return int(inputs[0], 2)
+
+
+def get_co2(binary_len: int, inputs: List) -> int:
+    for pos in range(binary_len):
+        current = list(map(lambda x: x[pos], inputs))
+        zero_count = current.count("0")
+        one_count = current.count("1")
+
+        if one_count > zero_count or one_count == zero_count:
+            inputs = list(filter(lambda x: x[pos] == "0", inputs))
+        elif one_count < zero_count:
+            inputs = list(filter(lambda x: x[pos] == "1", inputs))
+        if len(inputs) == 1:
+            return int(inputs[0], 2)
+
+
 def part2():
-    oxygen_generator_rating = 0
-    co2_scrubber_rate = 0
+    inputs = []
+    with open('input.txt', 'r') as file:
+        for line in file:
+            binary_len = len(line.strip())
+            inputs.append(line.strip())
+
+    o2 = get_o2(binary_len, inputs)
+    co2 = get_co2(binary_len, inputs)
+    return o2 * co2
 
 
 if __name__ == "__main__":
-    result = part1()
+    result = part2()
     print(result)
